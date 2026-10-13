@@ -31,7 +31,7 @@ export default function Tutoriales() {
                 </h1>
                 <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
                   <Sparkles size={10} />
-                  Base de conocimiento personal · Markdown · Dashboard · Snippets
+                  Markdown · Dashboard · Calendario · Backlinks · Pomodoro · Historial
                 </p>
               </div>
             </div>
@@ -47,8 +47,8 @@ export default function Tutoriales() {
                 Nueva
               </span>
               <span className="flex items-center gap-1">
-                <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">Ctrl+D</kbd>
-                Dashboard
+                <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">[[...]]</kbd>
+                Backlinks
               </span>
             </div>
           </div>

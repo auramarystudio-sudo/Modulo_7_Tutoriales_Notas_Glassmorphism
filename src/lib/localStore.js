@@ -1,8 +1,7 @@
 /**
  * Almacenamiento local en memoria (fallback cuando PocketBase no está disponible)
  * 
- * Simula las operaciones CRUD de PocketBase usando estado en memoria.
- * Incluye soporte para: pin, duplicar, nota del día, import/export.
+ * Soporta: CRUD, pin, duplicar, versiones, archivado, tags, import/export.
  */
 
 // Datos de ejemplo iniciales
@@ -23,9 +22,6 @@ docker ps -a
 
 # Detener un contenedor
 docker stop <container_id>
-
-# Eliminar un contenedor
-docker rm <container_id>
 \`\`\`
 
 ## Imágenes
@@ -34,31 +30,16 @@ docker rm <container_id>
 # Listar imágenes
 docker images
 
-# Eliminar una imagen
-docker rmi <image_id>
-
 # Construir una imagen
 docker build -t mi-app:latest .
 \`\`\`
 
-## Docker Compose
-
-\`\`\`bash
-# Levantar servicios
-docker-compose up -d
-
-# Ver logs
-docker-compose logs -f
-
-# Detener servicios
-docker-compose down
-\`\`\`
-
-> **Tip:** Usa \`docker-compose --profile dev up\` para levantar solo los servicios de desarrollo.`,
+> **Tip:** Relacionado con [[Optimización de React: useMemo y useCallback]] para CI/CD.`,
     categoria: 'comandos',
     tags: ['docker', 'contenedores', 'devops'],
     es_favorito: true,
     pinned: true,
+    archivado: false,
     fecha_creacion: '2024-01-15T10:00:00.000Z',
   },
   {
@@ -71,43 +52,22 @@ docker-compose down
 \`\`\`
 Actúa como un desarrollador senior experto en [tecnología].
 Genera código que siga los principios SOLID y las mejores prácticas.
-
-Requisitos:
-1. Código limpio y legible
-2. Comentarios en español
-3. Manejo de errores apropiado
-4. Tests unitarios incluidos
-5. Documentación JSDoc
 \`\`\`
 
 ## Variantes útiles
 
 ### Para refactoring:
 \`\`\`
-Analiza el siguiente código y sugiere mejoras:
-- Legibilidad
-- Performance
-- Patrones de diseño aplicables
-- Posibles bugs
-
+Analiza el siguiente código y sugiere mejoras.
 [pegar código aquí]
 \`\`\`
 
-### Para debugging:
-\`\`\`
-Tengo el siguiente error: [error]
-El código relevante es: [código]
-Contexto: [descripción del problema]
-
-Ayúdame a:
-1. Identificar la causa raíz
-2. Proponer una solución
-3. Explicar por qué ocurre
-\`\`\``,
+Ver también: [[Instalación de Tailwind CSS v4 con Vite]] para setup de proyectos.`,
     categoria: 'prompts',
     tags: ['ai', 'codigo-limpio', 'prompts'],
     es_favorito: true,
     pinned: false,
+    archivado: false,
     fecha_creacion: '2024-01-20T14:30:00.000Z',
   },
   {
@@ -118,41 +78,25 @@ Ayúdame a:
 ## ¿Cuándo usar useMemo?
 
 \`\`\`jsx
-// ✅ Úsalo para cálculos costosos
 const datosFiltrados = useMemo(() => {
   return items.filter(item => item.categoria === filtro);
 }, [items, filtro]);
-
-// ❌ No lo uses para valores simples
-const nombre = useMemo(() => usuario.nombre, [usuario]);
 \`\`\`
 
 ## ¿Cuándo usar useCallback?
 
 \`\`\`jsx
-// ✅ Úsalo para funciones pasadas a componentes hijos memorizados
 const handleClick = useCallback((id) => {
   setItems(prev => prev.filter(item => item.id !== id));
 }, []);
-
-// ✅ Úsalo en efectos con dependencias de función
-useEffect(() => {
-  fetchData();
-}, [fetchData]); // fetchData debe estar en useCallback
 \`\`\`
 
-## Reglas de oro
-
-1. **No optimices prematuramente** - mide primero
-2. **useMemo** es para **valores** calculados
-3. **useCallback** es para **funciones** estables
-4. Si el componente hijo no está memorizado con \`React.memo\`, \`useCallback\` no ayuda
-
-> **Nota:** En React 19, el compilador automático puede hacer estas optimizaciones por ti.`,
+> **Nota:** Combinar con [[Comandos esenciales de Docker]] para testing de performance.`,
     categoria: 'optimizacion',
     tags: ['react', 'performance', 'hooks'],
     es_favorito: false,
     pinned: false,
+    archivado: false,
     fecha_creacion: '2024-02-01T09:15:00.000Z',
   },
   {
@@ -169,43 +113,18 @@ npm install tailwindcss @tailwindcss/vite
 ## Configuración de Vite
 
 \`\`\`js
-// vite.config.js
-import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-
 export default defineConfig({
-  plugins: [
-    tailwindcss(),
-  ],
+  plugins: [tailwindcss()],
 });
 \`\`\`
 
-## CSS de entrada
-
-\`\`\`css
-/* src/index.css */
-@import "tailwindcss";
-\`\`\`
-
-## Cambios en v4
-
-- **No más** \`tailwind.config.js\` para la mayoría de casos
-- **Configuración en CSS** con \`@theme\`
-- **Mejor performance** con el nuevo motor Oxide
-- **Variables CSS** nativas
-
-\`\`\`css
-@import "tailwindcss";
-
-@theme {
-  --color-primary: #06b6d4;
-  --font-display: "Inter", sans-serif;
-}
-\`\`\``,
+Ver: [[Solución: Error CORS en desarrollo]] para problemas comunes.`,
     categoria: 'instalacion',
     tags: ['tailwind', 'vite', 'css'],
     es_favorito: false,
     pinned: false,
+    archivado: false,
     fecha_creacion: '2024-02-10T16:45:00.000Z',
   },
   {
@@ -216,51 +135,31 @@ export default defineConfig({
 ## El problema
 
 \`\`\`
-Access to fetch at 'http://api.example.com' from origin 
-'http://localhost:5173' has been blocked by CORS policy
+Access to fetch at 'http://api.example.com' has been blocked by CORS policy
 \`\`\`
 
 ## Soluciones
 
-### 1. Proxy en Vite (recomendado para desarrollo)
+### Proxy en Vite
 
 \`\`\`js
-// vite.config.js
 export default defineConfig({
   server: {
     proxy: {
-      '/api': {
-        target: 'http://api.example.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\\/api/, ''),
-      },
-    },
-  },
+      '/api': { target: 'http://api.example.com' }
+    }
+  }
 });
 \`\`\`
 
-### 2. Headers en el servidor (producción)
-
-\`\`\`
-Access-Control-Allow-Origin: https://tudominio.com
-Access-Control-Allow-Methods: GET, POST, PUT, DELETE
-Access-Control-Allow-Headers: Content-Type, Authorization
-\`\`\`
-
-### 3. Extensión de navegador (SOLO desarrollo)
-
-> ⚠️ **Nunca** uses esto en producción. Solo para debugging local.
-
-## Checklist de troubleshooting
-
-- [ ] ¿El servidor envía los headers correctos?
-- [ ] ¿La URL del API es correcta?
-- [ ] ¿Hay un proxy configurado?
-- [ ] ¿El método HTTP está permitido?`,
+- [x] Proxy configurado
+- [ ] Headers en producción
+- [ ] Tests de integración`,
     categoria: 'troubleshooting',
     tags: ['cors', 'vite', 'api', 'debug'],
     es_favorito: true,
     pinned: false,
+    archivado: false,
     fecha_creacion: '2024-02-15T11:20:00.000Z',
   },
 ];
@@ -268,22 +167,34 @@ Access-Control-Allow-Headers: Content-Type, Authorization
 // Estado en memoria
 let notas = [...notasIniciales];
 let nextId = 6;
+let versiones = {}; // { notaId: [{ id, contenido, fecha }] }
 
 /**
  * Obtener todas las notas
  */
-export const getAllNotas = async (sort = '-fecha_creacion') => {
+export const getAllNotas = async () => {
   await new Promise(resolve => setTimeout(resolve, 300));
-  
-  let resultado = [...notas];
-  
-  if (sort === '-fecha_creacion') {
-    resultado.sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
-  } else if (sort === 'fecha_creacion') {
-    resultado.sort((a, b) => new Date(a.fecha_creacion) - new Date(b.fecha_creacion));
-  }
-  
-  return resultado;
+  return [...notas].sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
+};
+
+/**
+ * Obtener notas no archivadas
+ */
+export const getNotasActivas = async () => {
+  await new Promise(resolve => setTimeout(resolve, 300));
+  return notas
+    .filter(n => !n.archivado)
+    .sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
+};
+
+/**
+ * Obtener notas archivadas
+ */
+export const getNotasArchivadas = async () => {
+  await new Promise(resolve => setTimeout(resolve, 300));
+  return notas
+    .filter(n => n.archivado)
+    .sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
 };
 
 /**
@@ -296,6 +207,7 @@ export const createNota = async (data) => {
     id: String(nextId++),
     ...data,
     pinned: data.pinned || false,
+    archivado: data.archivado || false,
     fecha_creacion: data.fecha_creacion || new Date().toISOString(),
   };
   
@@ -304,13 +216,28 @@ export const createNota = async (data) => {
 };
 
 /**
- * Actualizar una nota existente
+ * Actualizar una nota existente (guarda versión anterior)
  */
 export const updateNota = async (id, data) => {
   await new Promise(resolve => setTimeout(resolve, 200));
   
   const index = notas.findIndex(n => n.id === id);
   if (index === -1) throw new Error('Nota no encontrada');
+  
+  // Guardar versión anterior antes de actualizar
+  const notaActual = notas[index];
+  if (!versiones[id]) versiones[id] = [];
+  versiones[id].unshift({
+    id: String(versiones[id].length + 1),
+    contenido: notaActual.contenido,
+    titulo: notaActual.titulo,
+    fecha: new Date().toISOString(),
+  });
+  
+  // Limitar a 20 versiones por nota
+  if (versiones[id].length > 20) {
+    versiones[id] = versiones[id].slice(0, 20);
+  }
   
   notas[index] = { ...notas[index], ...data };
   return notas[index];
@@ -326,6 +253,7 @@ export const deleteNota = async (id) => {
   if (index === -1) throw new Error('Nota no encontrada');
   
   notas.splice(index, 1);
+  delete versiones[id];
   return true;
 };
 
@@ -343,7 +271,7 @@ export const toggleFavorito = async (id) => {
 };
 
 /**
- * Toggle pin (fijar nota)
+ * Toggle pin
  */
 export const togglePin = async (id) => {
   await new Promise(resolve => setTimeout(resolve, 100));
@@ -352,6 +280,19 @@ export const togglePin = async (id) => {
   if (!nota) throw new Error('Nota no encontrada');
   
   nota.pinned = !nota.pinned;
+  return nota;
+};
+
+/**
+ * Toggle archivado
+ */
+export const toggleArchivado = async (id) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  const nota = notas.find(n => n.id === id);
+  if (!nota) throw new Error('Nota no encontrada');
+  
+  nota.archivado = !nota.archivado;
   return nota;
 };
 
@@ -369,6 +310,7 @@ export const duplicarNota = async (id) => {
     id: String(nextId++),
     titulo: `${original.titulo} (copia)`,
     pinned: false,
+    archivado: false,
     fecha_creacion: new Date().toISOString(),
   };
   
@@ -377,38 +319,106 @@ export const duplicarNota = async (id) => {
 };
 
 /**
- * Obtener todos los tags únicos existentes
+ * Obtener versiones de una nota
+ */
+export const getVersiones = async (notaId) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  return versiones[notaId] || [];
+};
+
+/**
+ * Revertir a una versión anterior
+ */
+export const revertirVersion = async (notaId, versionId) => {
+  await new Promise(resolve => setTimeout(resolve, 200));
+  
+  const notaVersiones = versiones[notaId] || [];
+  const version = notaVersiones.find(v => v.id === versionId);
+  if (!version) throw new Error('Versión no encontrada');
+  
+  const index = notas.findIndex(n => n.id === notaId);
+  if (index === -1) throw new Error('Nota no encontrada');
+  
+  // Guardar versión actual antes de revertir
+  const notaActual = notas[index];
+  notaVersiones.unshift({
+    id: String(notaVersiones.length + 1),
+    contenido: notaActual.contenido,
+    titulo: notaActual.titulo,
+    fecha: new Date().toISOString(),
+  });
+  
+  // Aplicar versión antigua
+  notas[index] = {
+    ...notas[index],
+    contenido: version.contenido,
+    titulo: version.titulo,
+  };
+  
+  return notas[index];
+};
+
+/**
+ * Obtener todos los tags únicos
  */
 export const getAllTags = async () => {
   await new Promise(resolve => setTimeout(resolve, 50));
   
   const tagsSet = new Set();
   notas.forEach(nota => {
-    if (nota.tags) {
-      nota.tags.forEach(tag => tagsSet.add(tag));
-    }
+    if (nota.tags) nota.tags.forEach(tag => tagsSet.add(tag));
   });
   
   return Array.from(tagsSet).sort();
 };
 
 /**
- * Exportar toda la biblioteca como JSON
+ * Buscar notas por título (para backlinks [[...]])
+ */
+export const buscarNotasPorTitulo = async (termino) => {
+  await new Promise(resolve => setTimeout(resolve, 50));
+  
+  if (!termino.trim()) return [];
+  
+  const t = termino.toLowerCase();
+  return notas
+    .filter(n => n.titulo.toLowerCase().includes(t))
+    .map(n => ({ id: n.id, titulo: n.titulo }))
+    .slice(0, 10);
+};
+
+/**
+ * Obtener backlinks de una nota (notas que la enlazan)
+ */
+export const getBacklinks = async (notaId) => {
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  const nota = notas.find(n => n.id === notaId);
+  if (!nota) return [];
+  
+  const tituloNota = nota.titulo;
+  
+  return notas
+    .filter(n => n.id !== notaId && n.contenido.includes(`[[${tituloNota}]]`))
+    .map(n => ({ id: n.id, titulo: n.titulo }));
+};
+
+/**
+ * Exportar toda la biblioteca
  */
 export const exportarBiblioteca = async () => {
   await new Promise(resolve => setTimeout(resolve, 100));
   
-  const data = {
-    version: '1.0',
+  return JSON.stringify({
+    version: '2.0',
     exportado: new Date().toISOString(),
-    notas: notas,
-  };
-  
-  return JSON.stringify(data, null, 2);
+    notas,
+    versiones,
+  }, null, 2);
 };
 
 /**
- * Importar biblioteca desde JSON
+ * Importar biblioteca
  */
 export const importarBiblioteca = async (jsonString) => {
   await new Promise(resolve => setTimeout(resolve, 300));
@@ -417,44 +427,26 @@ export const importarBiblioteca = async (jsonString) => {
     const data = JSON.parse(jsonString);
     
     if (!data.notas || !Array.isArray(data.notas)) {
-      throw new Error('Formato inválido: se espera un objeto con propiedad "notas"');
+      throw new Error('Formato inválido');
     }
     
-    // Validar cada nota
-    data.notas.forEach((nota, index) => {
-      if (!nota.titulo || !nota.contenido || !nota.categoria) {
-        throw new Error(`Nota #${index + 1} inválida: faltan campos obligatorios`);
-      }
-    });
-    
-    // Reasignar IDs para evitar conflictos
     const notasImportadas = data.notas.map(nota => ({
       ...nota,
       id: String(nextId++),
+      archivado: nota.archivado || false,
+      pinned: nota.pinned || false,
     }));
     
     notas = [...notasImportadas, ...notas];
     
-    return {
-      importadas: notasImportadas.length,
-      total: notas.length,
-    };
+    if (data.versiones) {
+      Object.entries(data.versiones).forEach(([key, vers]) => {
+        versiones[key] = vers;
+      });
+    }
+    
+    return { importadas: notasImportadas.length, total: notas.length };
   } catch (error) {
     throw new Error(`Error al importar: ${error.message}`);
   }
-};
-
-/**
- * Obtener nota del día (rotación basada en fecha)
- */
-export const getNotaDelDia = async () => {
-  await new Promise(resolve => setTimeout(resolve, 50));
-  
-  if (notas.length === 0) return null;
-  
-  const hoy = new Date();
-  const seed = hoy.getFullYear() * 366 + hoy.getMonth() * 31 + hoy.getDate();
-  const indice = seed % notas.length;
-  
-  return notas[indice];
 };

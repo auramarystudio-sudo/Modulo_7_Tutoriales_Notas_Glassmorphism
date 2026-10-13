@@ -15,6 +15,9 @@ import {
   Pin,
   PinOff,
   Copy,
+  Archive,
+  ArchiveRestore,
+  History,
 } from 'lucide-react';
 import { CATEGORIAS } from './CategoryFilter';
 
@@ -63,6 +66,8 @@ export default function NotaCard({
   onToggleFavorito,
   onTogglePin,
   onDuplicar,
+  onArchivar,
+  onHistorial,
 }) {
   const categoria = CATEGORIAS[nota.categoria] || CATEGORIAS.general;
   const CategoriaIcon = categoria.icon;
@@ -263,6 +268,24 @@ export default function NotaCard({
         >
           <Copy size={13} />
         </button>
+        {onHistorial && (
+          <button
+            onClick={() => onHistorial(nota)}
+            className="p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-500 hover:text-orange-400 transition"
+            title="Historial de versiones"
+          >
+            <History size={13} />
+          </button>
+        )}
+        {onArchivar && (
+          <button
+            onClick={() => onArchivar(nota.id)}
+            className="p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-500 hover:text-amber-400 transition"
+            title={nota.archivado ? 'Desarchivar' : 'Archivar'}
+          >
+            {nota.archivado ? <ArchiveRestore size={13} /> : <Archive size={13} />}
+          </button>
+        )}
         <button
           onClick={() => onEditar(nota)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-medium transition"
