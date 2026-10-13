@@ -75,6 +75,19 @@ Ver también: [[Instalación de Tailwind CSS v4 con Vite]] para setup de proyect
     titulo: 'Optimización de React: useMemo y useCallback',
     contenido: `# Optimización de React
 
+## Flujo de decisión
+
+\`\`\`mermaid
+graph TD
+    A[¿Cálculo costoso?] -->|Sí| B[Usar useMemo]
+    A -->|No| C[No optimizar]
+    D[¿Función como prop?] -->|Sí| E[Usar useCallback]
+    D -->|No| F[Función normal]
+    B --> G[¿Componente hijo usa React.memo?]
+    G -->|Sí| H[✅ Optimización efectiva]
+    G -->|No| I[⚠️ Sin beneficio real]
+\`\`\`
+
 ## ¿Cuándo usar useMemo?
 
 \`\`\`jsx

@@ -18,6 +18,7 @@ import {
   Link2,
   Archive,
   ArchiveRestore,
+  Presentation,
 } from 'lucide-react';
 import MarkdownRenderer from './MarkdownRenderer';
 import TableOfContents from './TableOfContents';
@@ -59,6 +60,7 @@ export default function VistaLectura({
   onExportar,
   onVerNota,
   onToggleArchivado,
+  onPresentacion,
 }) {
   const [mostrarPomodoro, setMostrarPomodoro] = useState(false);
 
@@ -113,6 +115,16 @@ export default function VistaLectura({
             </span>
           </div>
           <div className="flex items-center gap-2">
+            {/* Presentación */}
+            {onPresentacion && (
+              <button
+                onClick={onPresentacion}
+                className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+                title="Modo presentación"
+              >
+                <Presentation size={15} />
+              </button>
+            )}
             {/* Pomodoro */}
             <button
               onClick={() => setMostrarPomodoro(!mostrarPomodoro)}

@@ -2,7 +2,8 @@
  * TutorialesLibrary.jsx
  * 
  * Componente principal de la biblioteca de tutoriales y notas.
- * Integra: Dashboard, Calendario, Archivo, Historial, Backlinks, Pomodoro.
+ * Integra: Dashboard, Calendario, Archivo, Historial, Backlinks,
+ * Pomodoro, Grafo, Mermaid, Búsqueda Avanzada, Presentación, Recordatorios.
  */
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
@@ -27,6 +28,10 @@ import {
   Calendar,
   Archive,
   History,
+  GitBranch,
+  Filter,
+  Bell,
+  Presentation,
 } from 'lucide-react';
 import {
   getNotasActivas,
@@ -49,11 +54,15 @@ import NotaForm from './NotaForm';
 import CategoryFilter from './CategoryFilter';
 import VistaLectura from './VistaLectura';
 import BusquedaRapida from './BusquedaRapida';
+import BusquedaAvanzada from './BusquedaAvanzada';
 import PlantillaSelector from './PlantillaSelector';
 import ConfirmDialog from './ConfirmDialog';
 import Dashboard from './Dashboard';
 import VistaCalendario from './VistaCalendario';
 import VersionHistory from './VersionHistory';
+import GrafoConocimiento from './GrafoConocimiento';
+import ModoPresentacion from './ModoPresentacion';
+import SistemaRecordatorios from './SistemaRecordatorios';
 import { ToastProvider, useToast } from './Toast';
 
 /**
@@ -72,7 +81,7 @@ function BibliotecaContent() {
   const [busqueda, setBusqueda] = useState('');
   const [ordenamiento, setOrdenamiento] = useState('recientes');
   const [vistaGrid, setVistaGrid] = useState(true);
-  const [vistaActual, setVistaActual] = useState('biblioteca'); // biblioteca | dashboard | calendario | archivo
+  const [vistaActual, setVistaActual] = useState('biblioteca');
   const [mostrarArchivadas, setMostrarArchivadas] = useState(false);
   
   // Modales
@@ -80,9 +89,13 @@ function BibliotecaContent() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [mostrarVistaLectura, setMostrarVistaLectura] = useState(null);
   const [mostrarBusquedaRapida, setMostrarBusquedaRapida] = useState(false);
+  const [mostrarBusquedaAvanzada, setMostrarBusquedaAvanzada] = useState(false);
   const [mostrarPlantillas, setMostrarPlantillas] = useState(false);
   const [mostrarHistorial, setMostrarHistorial] = useState(null);
   const [versiones, setVersiones] = useState([]);
+  const [mostrarGrafo, setMostrarGrafo] = useState(false);
+  const [mostrarPresentacion, setMostrarPresentacion] = useState(null);
+  const [mostrarRecordatorios, setMostrarRecordatorios] = useState(false);
   
   // Confirmación
   const [confirmarEliminacion, setConfirmarEliminacion] = useState(null);
@@ -121,12 +134,17 @@ function BibliotecaContent() {
         e.preventDefault();
         setMostrarBusquedaRapida(prev => !prev);
       }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        setMostrarBusquedaAvanzada(true);
+      }
       if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
         e.preventDefault();
         setMostrarPlantillas(true);
       }
       if (e.key === 'Escape') {
         setMostrarBusquedaRapida(false);
+        setMostrarBusquedaAvanzada(false);
         setMostrarPlantillas(false);
       }
     };
@@ -285,6 +303,7 @@ function BibliotecaContent() {
 
   const handleEditar = (nota) => {
     setMostrarVistaLectura(null);
+    setMostrarPresentacion(null);
     setModalFormulario(nota);
     setMostrarFormulario(true);
   };
@@ -322,7 +341,7 @@ function BibliotecaContent() {
 
       {/* Toggle de vistas */}
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-1 bg-slate-800/30 border border-slate-800/50 rounded-xl p-1">
+        <div className="flex items-center gap-1 bg-slate-800/30 border border-slate-800/50 rounded-xl p-1 flex-wrap">
           {[
             { key: 'biblioteca', icon: Library, label: 'Biblioteca' },
             { key: 'dashboard', icon: BarChart3, label: 'Dashboard' },
@@ -342,6 +361,20 @@ function BibliotecaContent() {
             </button>
           ))}
           <button
+            onClick={() => setMostrarGrafo(true)}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition"
+          >
+            <GitBranch size={14} />
+            <span className="hidden sm:inline">Grafo</span>
+          </button>
+          <button
+            onClick={() => setMostrarRecordatorios(true)}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition"
+          >
+            <Bell size={14} />
+            <span className="hidden sm:inline">Recordatorios</span>
+          </button>
+          <button
             onClick={() => { setMostrarArchivadas(!mostrarArchivadas); setVistaActual('biblioteca'); }}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition ${
               mostrarArchivadas
@@ -360,6 +393,13 @@ function BibliotecaContent() {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setMostrarBusquedaAvanzada(true)}
+            className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+            title="Búsqueda avanzada (Ctrl+F)"
+          >
+            <Filter size={15} />
+          </button>
           <button
             onClick={handleExportarBiblioteca}
             className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition"
@@ -444,7 +484,7 @@ function BibliotecaContent() {
             )}
           </div>
 
-          {/* Filtros por categoría (solo en biblioteca activa) */}
+          {/* Filtros por categoría */}
           {!mostrarArchivadas && (
             <CategoryFilter
               categoriaActiva={filtroCategoria}
@@ -460,7 +500,7 @@ function BibliotecaContent() {
               <div>
                 <p className="text-sm font-medium text-amber-300">Modo Archivo</p>
                 <p className="text-xs text-amber-400/60">
-                  {notasArchivadas.length} notas archivadas · Las notas archivadas no aparecen en la biblioteca principal
+                  {notasArchivadas.length} notas archivadas
                 </p>
               </div>
             </div>
@@ -490,7 +530,7 @@ function BibliotecaContent() {
                 </p>
                 <div className="flex items-center gap-1 text-[10px] text-slate-600">
                   <Sparkles size={10} />
-                  <span>Ctrl+N nueva · Ctrl+K buscar</span>
+                  <span>Ctrl+N nueva · Ctrl+K buscar · Ctrl+F avanzado</span>
                 </div>
               </div>
 
@@ -526,6 +566,19 @@ function BibliotecaContent() {
           onExportar={() => handleExportarNota(mostrarVistaLectura)}
           onVerNota={handleVerNota}
           onToggleArchivado={handleToggleArchivado}
+          onPresentacion={() => {
+            setMostrarPresentacion(mostrarVistaLectura);
+            setMostrarVistaLectura(null);
+          }}
+        />
+      )}
+
+      {/* Modo presentación */}
+      {mostrarPresentacion && (
+        <ModoPresentacion
+          nota={mostrarPresentacion}
+          todasLasNotas={todasLasNotas}
+          onCerrar={() => setMostrarPresentacion(null)}
         />
       )}
 
@@ -544,6 +597,17 @@ function BibliotecaContent() {
         notas={notas}
         onCerrar={() => setMostrarBusquedaRapida(false)}
         onSeleccionar={handleVerNota}
+      />
+
+      {/* Búsqueda avanzada */}
+      <BusquedaAvanzada
+        abierto={mostrarBusquedaAvanzada}
+        notas={todasLasNotas}
+        onSeleccionar={(nota) => {
+          setMostrarBusquedaAvanzada(false);
+          handleVerNota(nota);
+        }}
+        onCerrar={() => setMostrarBusquedaAvanzada(false)}
       />
 
       {/* Plantillas */}
@@ -567,6 +631,15 @@ function BibliotecaContent() {
         onCerrar={() => setMostrarPlantillas(false)}
       />
 
+      {/* Grafo de conocimiento */}
+      {mostrarGrafo && (
+        <GrafoConocimiento
+          notas={todasLasNotas}
+          onVerNota={handleVerNota}
+          onCerrar={() => setMostrarGrafo(false)}
+        />
+      )}
+
       {/* Historial de versiones */}
       {mostrarHistorial && (
         <VersionHistory
@@ -577,6 +650,14 @@ function BibliotecaContent() {
           onCerrar={() => setMostrarHistorial(null)}
         />
       )}
+
+      {/* Recordatorios */}
+      <SistemaRecordatorios
+        abierto={mostrarRecordatorios}
+        notas={notas}
+        onVerNota={handleVerNota}
+        onCerrar={() => setMostrarRecordatorios(false)}
+      />
 
       {/* Confirmación */}
       <ConfirmDialog
