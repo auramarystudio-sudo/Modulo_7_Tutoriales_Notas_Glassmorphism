@@ -2,7 +2,8 @@
  * NotaCard.jsx
  * 
  * Tarjeta de vista previa de una nota/tutorial.
- * Muestra título, categoría, tags, extracto del contenido y acciones.
+ * Soporta modo grid (tarjeta completa) y modo lista (compacto).
+ * Incluye placeholder para Módulo 8: AI Learning Mentor.
  */
 import {
   Star,
@@ -10,6 +11,7 @@ import {
   Pencil,
   Trash2,
   Brain,
+  Clock,
 } from 'lucide-react';
 import { CATEGORIAS } from './CategoryFilter';
 
@@ -18,17 +20,16 @@ import { CATEGORIAS } from './CategoryFilter';
  */
 const extraerTextoPlano = (markdown, maxLength = 100) => {
   if (!markdown) return '';
-  // Eliminar sintaxis Markdown básica
   let texto = markdown
-    .replace(/#{1,6}\s/g, '')           // Headers
-    .replace(/\*\*(.*?)\*\*/g, '$1')     // Bold
-    .replace(/\*(.*?)\*/g, '$1')         // Italic
-    .replace(/`{1,3}[^`]*`{1,3}/g, '')   // Code
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Links
-    .replace(/>\s/g, '')                 // Blockquotes
-    .replace(/[-*+]\s/g, '')            // List items
-    .replace(/\n/g, ' ')                // Saltos de línea
-    .replace(/\s+/g, ' ')              // Espacios múltiples
+    .replace(/#{1,6}\s/g, '')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/`{1,3}[^`]*`{1,3}/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/>\s/g, '')
+    .replace(/[-*+]\s/g, '')
+    .replace(/\n/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
   
   if (texto.length > maxLength) {
@@ -38,23 +39,103 @@ const extraerTextoPlano = (markdown, maxLength = 100) => {
 };
 
 /**
+ * Calcula el tiempo de lectura estimado
+ */
+const calcularTiempoLectura = (contenido) => {
+  if (!contenido) return '1 min';
+  const palabras = contenido.split(/\s+/).length;
+  const minutos = Math.ceil(palabras / 200);
+  return minutos <= 1 ? '1 min' : `${minutos} min`;
+};
+
+/**
  * Componente de tarjeta de nota
  * 
  * @param {Object} props
  * @param {Object} props.nota - Datos de la nota
+ * @param {boolean} props.compacto - Si mostrar en modo lista compacta
  * @param {Function} props.onVer - Callback al hacer clic en "Ver"
  * @param {Function} props.onEditar - Callback al hacer clic en "Editar"
  * @param {Function} props.onEliminar - Callback al hacer clic en "Eliminar"
  * @param {Function} props.onToggleFavorito - Callback al toggle favorito
  */
-export default function NotaCard({ nota, onVer, onEditar, onEliminar, onToggleFavorito }) {
+export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEliminar, onToggleFavorito }) {
   const categoria = CATEGORIAS[nota.categoria] || CATEGORIAS.general;
   const CategoriaIcon = categoria.icon;
   const tags = nota.tags || [];
   const tagsVisibles = tags.slice(0, 3);
   const tagsRestantes = tags.length - 3;
   const extracto = extraerTextoPlano(nota.contenido);
+  const tiempoLectura = calcularTiempoLectura(nota.contenido);
 
+  // Modo lista compacta
+  if (compacto) {
+    return (
+      <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4 backdrop-blur-sm hover:border-slate-700/50 transition-all duration-300 group flex items-center gap-4">
+        {/* Icono de categoría */}
+        <div className={`p-2.5 rounded-xl border shrink-0 ${categoria.color}`}>
+          <CategoriaIcon size={16} />
+        </div>
+
+        {/* Contenido */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-slate-100 truncate">
+              {nota.titulo}
+            </h3>
+            {nota.es_favorito && (
+              <Star size={12} className="text-yellow-400 fill-yellow-400 shrink-0" />
+            )}
+          </div>
+          <div className="flex items-center gap-3 mt-1">
+            <span className="text-xs text-slate-500 flex items-center gap-1">
+              <Clock size={10} />
+              {tiempoLectura}
+            </span>
+            {tags.length > 0 && (
+              <div className="flex items-center gap-1">
+                {tags.slice(0, 2).map((tag, i) => (
+                  <span key={i} className="text-[10px] text-slate-600">
+                    #{tag}
+                  </span>
+                ))}
+                {tagsRestantes > 0 && (
+                  <span className="text-[10px] text-slate-600">+{tagsRestantes}</span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Acciones */}
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+          <button
+            onClick={() => onVer(nota)}
+            className="p-2 rounded-lg hover:bg-slate-800 text-slate-500 hover:text-cyan-400 transition"
+            title="Ver"
+          >
+            <Eye size={14} />
+          </button>
+          <button
+            onClick={() => onEditar(nota)}
+            className="p-2 rounded-lg hover:bg-slate-800 text-slate-500 hover:text-white transition"
+            title="Editar"
+          >
+            <Pencil size={14} />
+          </button>
+          <button
+            onClick={() => onEliminar(nota.id)}
+            className="p-2 rounded-lg hover:bg-red-950/50 text-slate-500 hover:text-red-400 transition"
+            title="Eliminar"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Modo grid (tarjeta completa)
   return (
     <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-5 backdrop-blur-sm shadow-xl hover:border-slate-700/50 transition-all duration-300 group flex flex-col">
       {/* Header de la tarjeta */}
@@ -84,6 +165,10 @@ export default function NotaCard({ nota, onVer, onEditar, onEliminar, onToggleFa
           <CategoriaIcon size={11} />
           {categoria.label}
         </span>
+        <span className="text-[10px] text-slate-600 flex items-center gap-1">
+          <Clock size={9} />
+          {tiempoLectura}
+        </span>
       </div>
 
       {/* Extracto del contenido */}
@@ -93,7 +178,7 @@ export default function NotaCard({ nota, onVer, onEditar, onEliminar, onToggleFa
 
       {/* Tags */}
       {tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-3">
           {tagsVisibles.map((tag, index) => (
             <span
               key={index}
