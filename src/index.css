@@ -1,17 +1,49 @@
 @import "tailwindcss";
 
-/* Animaciones personalizadas para toasts y modales */
-@keyframes slideIn {
+/* ============================================
+   ANIMACIONES CINEMÁTICAS - Estilo Lyric Video
+   ============================================ */
+
+/* Flotación suave para la mascota */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Wobble para modo thinking */
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+/* Wave para saludo */
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  50% { transform: rotate(-10deg); }
+  75% { transform: rotate(15deg); }
+}
+
+/* Blink para los ojos */
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+/* Slide up para diálogos */
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateY(10px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0) scale(1);
   }
 }
 
+/* Scale in para modales */
 @keyframes scaleIn {
   from {
     opacity: 0;
@@ -23,16 +55,62 @@
   }
 }
 
-@keyframes fadeIn {
+/* Slide in para toasts */
+@keyframes slideIn {
   from {
     opacity: 0;
+    transform: translateX(20px);
   }
   to {
     opacity: 1;
+    transform: translateX(0);
   }
 }
 
-/* Scrollbar personalizado para el tema oscuro */
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Glow pulse para elementos destacados */
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.4), 0 0 60px rgba(6, 182, 212, 0.2);
+  }
+}
+
+/* Gradient shift para fondos animados */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Letter reveal para lyric titles */
+@keyframes letterReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) rotateX(-90deg);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+    filter: blur(0);
+  }
+}
+
+/* Beat pulse para el visualizer */
+@keyframes beatPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Scrollbar personalizado */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -51,19 +129,19 @@
   background: rgba(100, 116, 139, 0.5);
 }
 
-/* Estilos para la selección de texto */
+/* Selección de texto */
 ::selection {
   background: rgba(6, 182, 212, 0.3);
   color: #e2e8f0;
 }
 
-/* Suavizar la transición de fuentes */
+/* Suavizado de fuentes */
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Estilos para el line-clamp */
+/* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -76,4 +154,45 @@ html {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Clases utilitarias para animaciones */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+.animate-beat {
+  animation: beatPulse 1s ease-in-out infinite;
+}
+
+/* Efecto de texto con glow */
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5), 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+/* Fondo con gradiente animado */
+.bg-animated-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(6, 182, 212, 0.05) 0%,
+    rgba(168, 85, 247, 0.05) 25%,
+    rgba(6, 182, 212, 0.05) 50%,
+    rgba(168, 85, 247, 0.05) 75%,
+    rgba(6, 182, 212, 0.05) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
 }

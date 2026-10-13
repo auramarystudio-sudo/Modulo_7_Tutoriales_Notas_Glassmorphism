@@ -68,7 +68,7 @@ import { ToastProvider, useToast } from './Toast';
 /**
  * Contenido interno de la biblioteca
  */
-function BibliotecaContent() {
+function BibliotecaContent({ onContextChange, onNotasChange }) {
   const { showToast } = useToast();
   const fileInputRef = useRef(null);
   
@@ -124,6 +124,21 @@ function BibliotecaContent() {
   useEffect(() => {
     cargarNotas();
   }, []);
+
+  // Notificar al padre sobre cambios
+  useEffect(() => {
+    if (onNotasChange) onNotasChange(notas.length);
+  }, [notas.length, onNotasChange]);
+
+  useEffect(() => {
+    if (onContextChange) {
+      if (mostrarBusquedaRapida || mostrarBusquedaAvanzada) onContextChange('buscando');
+      else if (mostrarFormulario) onContextChange('nuevaNota');
+      else if (mostrarVistaLectura) onContextChange('leyendo');
+      else if (notas.length > 3) onContextChange('logros');
+      else onContextChange('idle');
+    }
+  }, [mostrarBusquedaRapida, mostrarBusquedaAvanzada, mostrarFormulario, mostrarVistaLectura, notas.length, onContextChange]);
 
   /**
    * Atajos de teclado
@@ -673,10 +688,10 @@ function BibliotecaContent() {
   );
 }
 
-export default function TutorialesLibrary() {
+export default function TutorialesLibrary({ onContextChange, onNotasChange }) {
   return (
     <ToastProvider>
-      <BibliotecaContent />
+      <BibliotecaContent onContextChange={onContextChange} onNotasChange={onNotasChange} />
     </ToastProvider>
   );
 }
