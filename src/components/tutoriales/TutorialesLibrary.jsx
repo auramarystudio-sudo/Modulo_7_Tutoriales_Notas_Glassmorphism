@@ -354,9 +354,9 @@ function BibliotecaContent({ onContextChange, onNotasChange }) {
         className="hidden"
       />
 
-      {/* Toggle de vistas */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-1 bg-slate-800/30 border border-slate-800/50 rounded-xl p-1 flex-wrap">
+      {/* Toggle de vistas — Glassmorphism Dark Pro v3.0 */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center gap-1 bg-slate-900/50 border border-slate-800/50 rounded-2xl p-1.5 backdrop-blur-sm shadow-xl flex-wrap">
           {[
             { key: 'biblioteca', icon: Library, label: 'Biblioteca' },
             { key: 'dashboard', icon: BarChart3, label: 'Dashboard' },
@@ -365,66 +365,67 @@ function BibliotecaContent({ onContextChange, onNotasChange }) {
             <button
               key={key}
               onClick={() => { setVistaActual(key); setMostrarArchivadas(false); }}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 vistaActual === key && !mostrarArchivadas
                   ? 'bg-cyan-600 text-white shadow-lg'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
               }`}
             >
-              <Icon size={14} />
+              <Icon size={15} />
               <span className="hidden sm:inline">{label}</span>
             </button>
           ))}
           <button
             onClick={() => setMostrarGrafo(true)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200"
           >
-            <GitBranch size={14} />
+            <GitBranch size={15} />
             <span className="hidden sm:inline">Grafo</span>
           </button>
           <button
             onClick={() => setMostrarRecordatorios(true)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white transition"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-all duration-200"
           >
-            <Bell size={14} />
+            <Bell size={15} />
             <span className="hidden sm:inline">Recordatorios</span>
           </button>
           <button
             onClick={() => { setMostrarArchivadas(!mostrarArchivadas); setVistaActual('biblioteca'); }}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
               mostrarArchivadas
                 ? 'bg-amber-600 text-white shadow-lg'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
-            <Archive size={14} />
+            <Archive size={15} />
             <span className="hidden sm:inline">Archivo</span>
             {notasArchivadas.length > 0 && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/10">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white/10 font-bold">
                 {notasArchivadas.length}
               </span>
             )}
           </button>
         </div>
 
+        {/* Acciones rápidas */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => setMostrarBusquedaAvanzada(true)}
-            className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+            className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition border border-slate-700/50"
             title="Búsqueda avanzada (Ctrl+F)"
           >
             <Filter size={15} />
           </button>
           <button
             onClick={handleExportarBiblioteca}
-            className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+            className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition border border-slate-700/50"
             title="Exportar biblioteca"
           >
             <Download size={15} />
           </button>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+            className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition border border-slate-700/50"
             title="Importar biblioteca"
           >
             <Upload size={15} />
@@ -445,18 +446,18 @@ function BibliotecaContent({ onContextChange, onNotasChange }) {
       {/* Vista Biblioteca / Archivo */}
       {(vistaActual === 'biblioteca' || mostrarArchivadas) && (
         <>
-          {/* Búsqueda y acciones */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          {/* Búsqueda y acciones — Glassmorphism Dark Pro v3.0 */}
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder={mostrarArchivadas ? "Buscar en archivo..." : "Buscar por título, contenido o tags..."}
-                className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg pl-10 pr-20 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition"
+                className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg pl-11 pr-20 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
               />
-              <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800/80 text-[10px] text-slate-500 font-mono border border-slate-700/50">
+              <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800/60 text-[10px] text-slate-500 font-mono border border-slate-700/50">
                 <Keyboard size={9} />
                 Ctrl+K
               </kbd>
@@ -466,31 +467,31 @@ function BibliotecaContent({ onContextChange, onNotasChange }) {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setVistaGrid(!vistaGrid)}
-                  className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition"
+                  className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition border border-slate-700/50"
                 >
                   {vistaGrid ? <List size={16} /> : <LayoutGrid size={16} />}
                 </button>
                 <div className="relative group">
-                  <button className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition">
+                  <button className="p-2.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition border border-slate-700/50">
                     {ordenamiento === 'recientes' && <Clock size={16} />}
                     {ordenamiento === 'alfabetico' && <ArrowDownAZ size={16} />}
                     {ordenamiento === 'favoritos' && <Star size={16} />}
                   </button>
-                  <div className="absolute right-0 top-full mt-1 w-44 bg-slate-900/95 border border-slate-800/50 rounded-xl shadow-xl backdrop-blur-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-30">
-                    <button onClick={() => setOrdenamiento('recientes')} className={`flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-slate-800/50 transition rounded-t-xl ${ordenamiento === 'recientes' ? 'text-cyan-400' : 'text-slate-400'}`}>
-                      <Clock size={13} /> Más recientes
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-slate-900/95 border border-slate-800/50 rounded-2xl shadow-2xl backdrop-blur-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-30 overflow-hidden">
+                    <button onClick={() => setOrdenamiento('recientes')} className={`flex items-center gap-3 w-full px-4 py-3 text-sm text-left hover:bg-slate-800/50 transition ${ordenamiento === 'recientes' ? 'text-cyan-400 bg-cyan-950/20' : 'text-slate-400'}`}>
+                      <Clock size={14} /> Más recientes
                     </button>
-                    <button onClick={() => setOrdenamiento('alfabetico')} className={`flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-slate-800/50 transition ${ordenamiento === 'alfabetico' ? 'text-cyan-400' : 'text-slate-400'}`}>
-                      <ArrowDownAZ size={13} /> Alfabético
+                    <button onClick={() => setOrdenamiento('alfabetico')} className={`flex items-center gap-3 w-full px-4 py-3 text-sm text-left hover:bg-slate-800/50 transition ${ordenamiento === 'alfabetico' ? 'text-cyan-400 bg-cyan-950/20' : 'text-slate-400'}`}>
+                      <ArrowDownAZ size={14} /> Alfabético
                     </button>
-                    <button onClick={() => setOrdenamiento('favoritos')} className={`flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-slate-800/50 transition rounded-b-xl ${ordenamiento === 'favoritos' ? 'text-cyan-400' : 'text-slate-400'}`}>
-                      <Star size={13} /> Favoritos
+                    <button onClick={() => setOrdenamiento('favoritos')} className={`flex items-center gap-3 w-full px-4 py-3 text-sm text-left hover:bg-slate-800/50 transition ${ordenamiento === 'favoritos' ? 'text-cyan-400 bg-cyan-950/20' : 'text-slate-400'}`}>
+                      <Star size={14} /> Favoritos
                     </button>
                   </div>
                 </div>
                 <button
                   onClick={() => setMostrarPlantillas(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-medium transition shadow-lg whitespace-nowrap"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm font-medium transition-all duration-200 shadow-lg whitespace-nowrap"
                 >
                   <Plus size={16} />
                   <span className="hidden sm:inline">Nueva Nota</span>
@@ -508,14 +509,16 @@ function BibliotecaContent({ onContextChange, onNotasChange }) {
             />
           )}
 
-          {/* Banner de archivo */}
+          {/* Banner de archivo — Glassmorphism Dark Pro v3.0 */}
           {mostrarArchivadas && (
-            <div className="bg-amber-950/20 border border-amber-800/30 rounded-xl p-4 flex items-center gap-3">
-              <Archive size={18} className="text-amber-400" />
+            <div className="bg-amber-950/20 border border-amber-800/30 rounded-2xl p-6 flex items-center gap-4 backdrop-blur-sm shadow-xl">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
+                <Archive size={18} className="text-white" />
+              </div>
               <div>
-                <p className="text-sm font-medium text-amber-300">Modo Archivo</p>
-                <p className="text-xs text-amber-400/60">
-                  {notasArchivadas.length} notas archivadas
+                <p className="text-sm font-semibold text-amber-300">Modo Archivo</p>
+                <p className="text-xs text-amber-400/60 mt-0.5">
+                  {notasArchivadas.length} notas archivadas · No aparecen en la biblioteca principal
                 </p>
               </div>
             </div>
@@ -523,17 +526,21 @@ function BibliotecaContent({ onContextChange, onNotasChange }) {
 
           {/* Contenido */}
           {cargando ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 size={32} className="text-cyan-400 animate-spin mb-4" />
-              <p className="text-slate-400 text-sm">Cargando...</p>
+            <div className="flex flex-col items-center justify-center py-20 bg-slate-900/50 border border-slate-800/50 rounded-2xl backdrop-blur-sm shadow-xl">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg mb-4 animate-pulse">
+                <Loader2 size={24} className="text-white animate-spin" />
+              </div>
+              <p className="text-sm text-slate-400">Cargando tu biblioteca...</p>
             </div>
           ) : notasFiltradas.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 bg-slate-900/50 border border-slate-800/50 rounded-2xl backdrop-blur-sm">
-              <Inbox size={40} className="text-slate-600 mb-4" />
-              <p className="text-slate-400 text-lg font-medium mb-2">
+            <div className="flex flex-col items-center justify-center py-20 bg-slate-900/50 border border-slate-800/50 rounded-2xl backdrop-blur-sm shadow-xl">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-lg mb-4 border border-slate-700/50">
+                <Inbox size={32} className="text-slate-600" />
+              </div>
+              <p className="text-lg font-semibold text-slate-300 mb-2">
                 {mostrarArchivadas ? 'No hay notas archivadas' : 'No hay notas'}
               </p>
-              <p className="text-slate-500 text-sm">
+              <p className="text-sm text-slate-500">
                 {busqueda ? `Sin resultados para "${busqueda}"` : 'Tu biblioteca está vacía'}
               </p>
             </div>
@@ -541,11 +548,16 @@ function BibliotecaContent({ onContextChange, onNotasChange }) {
             <>
               <div className="flex items-center justify-between">
                 <p className="text-sm text-slate-500">
-                  {notasFiltradas.length} {notasFiltradas.length === 1 ? 'nota' : 'notas'}
+                  <span className="font-semibold text-slate-400">{notasFiltradas.length}</span> {notasFiltradas.length === 1 ? 'nota' : 'notas'}
+                  {notasFiltradas.some(n => n.pinned) && (
+                    <span className="ml-2 text-cyan-400/60">
+                      · {notasFiltradas.filter(n => n.pinned).length} fijada{notasFiltradas.filter(n => n.pinned).length > 1 ? 's' : ''}
+                    </span>
+                  )}
                 </p>
-                <div className="flex items-center gap-1 text-[10px] text-slate-600">
-                  <Sparkles size={10} />
-                  <span>Ctrl+N nueva · Ctrl+K buscar · Ctrl+F avanzado</span>
+                <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <Sparkles size={11} className="text-cyan-400/40" />
+                  <span className="hidden md:inline">Ctrl+N nueva · Ctrl+K buscar · Ctrl+F avanzado</span>
                 </div>
               </div>
 

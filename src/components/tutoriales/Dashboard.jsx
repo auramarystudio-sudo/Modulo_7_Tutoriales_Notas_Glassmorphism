@@ -131,9 +131,11 @@ export default function Dashboard({ notas, onVerNota }) {
     <div className="space-y-6">
       {/* Nota del día */}
       {notaDelDia && (
-        <div className="bg-gradient-to-r from-cyan-950/40 to-purple-950/40 border border-cyan-800/20 rounded-2xl p-5 backdrop-blur-sm">
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles size={16} className="text-cyan-400" />
+        <div className="bg-gradient-to-r from-cyan-950/40 to-purple-950/40 border border-cyan-800/30 rounded-2xl p-6 backdrop-blur-sm shadow-xl">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg">
+              <Sparkles size={14} className="text-white" />
+            </div>
             <span className="text-xs font-semibold text-cyan-400 uppercase tracking-wider">
               Nota del día
             </span>
@@ -155,56 +157,58 @@ export default function Dashboard({ notas, onVerNota }) {
         </div>
       )}
 
-      {/* Stats cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4 backdrop-blur-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded-lg bg-cyan-950/50 border border-cyan-800/30">
-              <BookOpen size={14} className="text-cyan-400" />
+      {/* Stats cards — Glassmorphism Dark Pro v3.0 */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-sm shadow-xl hover:border-slate-700/50 transition-all duration-200">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center shadow-lg">
+              <BookOpen size={18} className="text-white" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-slate-100">{stats.totalNotas}</p>
-          <p className="text-xs text-slate-500">Notas totales</p>
+          <p className="text-3xl font-bold text-slate-100">{stats.totalNotas}</p>
+          <p className="text-xs text-slate-500 mt-1">Notas totales</p>
         </div>
 
-        <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4 backdrop-blur-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded-lg bg-yellow-950/50 border border-yellow-800/30">
-              <Star size={14} className="text-yellow-400" />
+        <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-sm shadow-xl hover:border-slate-700/50 transition-all duration-200">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg">
+              <Star size={18} className="text-white" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-slate-100">{stats.totalFavoritos}</p>
-          <p className="text-xs text-slate-500">Favoritas</p>
+          <p className="text-3xl font-bold text-slate-100">{stats.totalFavoritos}</p>
+          <p className="text-xs text-slate-500 mt-1">Favoritas</p>
         </div>
 
-        <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4 backdrop-blur-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded-lg bg-purple-950/50 border border-purple-800/30">
-              <Tag size={14} className="text-purple-400" />
+        <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-sm shadow-xl hover:border-slate-700/50 transition-all duration-200">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+              <Tag size={18} className="text-white" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-slate-100">{stats.totalTags}</p>
-          <p className="text-xs text-slate-500">Tags únicos</p>
+          <p className="text-3xl font-bold text-slate-100">{stats.totalTags}</p>
+          <p className="text-xs text-slate-500 mt-1">Tags únicos</p>
         </div>
 
-        <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4 backdrop-blur-sm">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded-lg bg-orange-950/50 border border-orange-800/30">
-              <Flame size={14} className="text-orange-400" />
+        <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-sm shadow-xl hover:border-slate-700/50 transition-all duration-200">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg">
+              <Flame size={18} className="text-white" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-slate-100">{stats.racha}</p>
-          <p className="text-xs text-slate-500">Días de racha 🔥</p>
+          <p className="text-3xl font-bold text-slate-100">{stats.racha}</p>
+          <p className="text-xs text-slate-500 mt-1">Días de racha 🔥</p>
         </div>
       </div>
 
       {/* Gráfico de actividad + Distribución por categoría */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid gap-6 lg:grid-cols-[1fr_400px]">
         {/* Gráfico de actividad (últimos 30 días) */}
-        <div className="lg:col-span-2 bg-slate-900/50 border border-slate-800/50 rounded-2xl p-5 backdrop-blur-sm">
+        <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-sm shadow-xl">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp size={16} className="text-cyan-400" />
-            <h3 className="text-sm font-semibold text-slate-200">Actividad (últimos 30 días)</h3>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <TrendingUp size={16} className="text-white" />
+            </div>
+            <h3 className="text-sm font-semibold text-slate-300">Actividad (últimos 30 días)</h3>
           </div>
           
           {/* Grid de actividad */}
@@ -231,10 +235,12 @@ export default function Dashboard({ notas, onVerNota }) {
         </div>
 
         {/* Distribución por categoría */}
-        <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-5 backdrop-blur-sm">
+        <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-6 backdrop-blur-sm shadow-xl">
           <div className="flex items-center gap-2 mb-4">
-            <Calendar size={16} className="text-purple-400" />
-            <h3 className="text-sm font-semibold text-slate-200">Por categoría</h3>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-lg">
+              <Calendar size={16} className="text-white" />
+            </div>
+            <h3 className="text-sm font-semibold text-slate-300">Por categoría</h3>
           </div>
           
           <div className="space-y-3">

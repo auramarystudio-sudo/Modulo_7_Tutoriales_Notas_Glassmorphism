@@ -2,6 +2,8 @@
  * Tutoriales.jsx
  * 
  * Página principal del módulo de Tutoriales y Notas.
+ * Aplica estrictamente el estilo "Glassmorphism Dark Pro v3.0".
+ * 
  * Experiencia cinemática con:
  * - Visualizer de fondo animado
  * - Mascota guía (Pixel)
@@ -12,18 +14,18 @@ import { useState, useEffect } from 'react';
 import {
   BookOpen,
   Sparkles,
-  Zap,
 } from 'lucide-react';
 import TutorialesLibrary from '../components/tutoriales/TutorialesLibrary';
 import VisualizerBackground from '../components/tutoriales/VisualizerBackground';
 import MascotaGuia from '../components/tutoriales/MascotaGuia';
 import LyricTitle, { LyricSubtitle } from '../components/tutoriales/LyricTitle';
+import { COMPONENTS, BACKGROUNDS, BORDERS, TYPOGRAPHY, EFFECTS } from '../utils/designTokens';
 
 /**
  * Pantalla de intro cinemática
  */
 function IntroScreen({ onComplete }) {
-  const [fase, setFase] = useState(0); // 0: logo, 1: título, 2: subtítulo, 3: done
+  const [fase, setFase] = useState(0);
 
   useEffect(() => {
     const timers = [
@@ -42,19 +44,14 @@ function IntroScreen({ onComplete }) {
   }, [fase, onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950">
+    <div className={`fixed inset-0 z-50 flex items-center justify-center ${BACKGROUNDS.main}`}>
       <VisualizerBackground />
       
       <div className="relative z-10 flex flex-col items-center gap-6">
         {/* Logo animado */}
-        <div
-          className={`
-            transition-all duration-1000 ease-out
-            ${fase >= 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}
-          `}
-        >
+        <div className={`transition-all duration-1000 ease-out ${fase >= 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}>
           <div className="relative">
-            <div className="p-6 rounded-3xl bg-gradient-to-br from-cyan-950/50 to-purple-950/50 border border-cyan-800/30 animate-glow-pulse">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-cyan-950/50 to-purple-950/50 border border-cyan-800/30 shadow-2xl animate-glow-pulse">
               <BookOpen size={48} className="text-cyan-400" />
             </div>
             {/* Partículas alrededor del logo */}
@@ -76,12 +73,7 @@ function IntroScreen({ onComplete }) {
         </div>
 
         {/* Título lyric video */}
-        <div
-          className={`
-            transition-all duration-700 ease-out text-center
-            ${fase >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-          `}
-        >
+        <div className={`transition-all duration-700 ease-out text-center ${fase >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <LyricTitle
             text="Tutoriales y Notas"
             delay={0}
@@ -90,12 +82,7 @@ function IntroScreen({ onComplete }) {
         </div>
 
         {/* Subtítulo typing */}
-        <div
-          className={`
-            transition-all duration-700 ease-out
-            ${fase >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-          `}
-        >
+        <div className={`transition-all duration-700 ease-out ${fase >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <LyricSubtitle
             text="Tu base de conocimiento personal, con vida propia ✨"
             delay={0}
@@ -104,12 +91,7 @@ function IntroScreen({ onComplete }) {
         </div>
 
         {/* Barra de progreso sutil */}
-        <div
-          className={`
-            w-48 h-0.5 bg-slate-800 rounded-full overflow-hidden transition-opacity duration-500
-            ${fase >= 2 ? 'opacity-100' : 'opacity-0'}
-          `}
-        >
+        <div className={`w-48 h-0.5 bg-slate-800/50 rounded-full overflow-hidden transition-opacity duration-500 ${fase >= 2 ? 'opacity-100' : 'opacity-0'}`}>
           <div
             className="h-full bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full transition-all duration-[2500ms] ease-out"
             style={{ width: fase >= 3 ? '100%' : '0%' }}
@@ -122,13 +104,13 @@ function IntroScreen({ onComplete }) {
 
 /**
  * Página principal de Tutoriales
+ * Layout principal según Glassmorphism Dark Pro v3.0
  */
 export default function Tutoriales() {
   const [introCompleta, setIntroCompleta] = useState(false);
   const [contextoMascota, setContextoMascota] = useState('bienvenida');
   const [totalNotas, setTotalNotas] = useState(0);
 
-  // Después de la intro, cambiar contexto de la mascota
   useEffect(() => {
     if (introCompleta) {
       const timer = setTimeout(() => setContextoMascota('idle'), 3000);
@@ -141,7 +123,7 @@ export default function Tutoriales() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 relative overflow-hidden">
+    <div className={`${COMPONENTS.mainLayout} relative overflow-hidden`}>
       {/* Fondo visualizer */}
       <VisualizerBackground />
 
@@ -150,49 +132,48 @@ export default function Tutoriales() {
 
       {/* Contenido principal */}
       <div className="relative z-10">
-        {/* Header flotante */}
-        <header className="border-b border-slate-800/30 bg-slate-900/70 backdrop-blur-xl sticky top-0 z-40 shadow-lg">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="p-2 rounded-xl bg-gradient-to-br from-cyan-950/50 to-purple-950/50 border border-cyan-800/30 animate-glow-pulse">
-                    <BookOpen size={22} className="text-cyan-400" />
-                  </div>
-                  <div className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+        {/* Header — Glassmorphism Dark Pro v3.0 */}
+        <header className={`${COMPONENTS.header}`}>
+          <div className={`${COMPONENTS.headerContent} flex items-center justify-between`}>
+            {/* Logo + Título */}
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg">
+                  <BookOpen className="w-5 h-5 text-white" />
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-shift">
-                    Tutoriales y Notas
-                  </h1>
-                  <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
-                    <Sparkles size={10} className="text-cyan-400/60" />
-                    <span>Markdown · Mermaid · Grafo · Presentación · Recordatorios</span>
-                  </p>
-                </div>
+                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
               </div>
-              
-              {/* Atajos visibles */}
-              <div className="hidden lg:flex items-center gap-3 text-[10px] text-slate-600">
-                <span className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">Ctrl+K</kbd>
-                  Buscar
-                </span>
-                <span className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">Ctrl+F</kbd>
-                  Avanzada
-                </span>
-                <span className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">Ctrl+N</kbd>
-                  Nueva
-                </span>
+              <div>
+                <h1 className={`${TYPOGRAPHY.titleGradient}`}>
+                  Tutoriales y Notas
+                </h1>
+                <p className={`${TYPOGRAPHY.tertiary} flex items-center gap-1 mt-0.5`}>
+                  <Sparkles size={10} className="text-cyan-400/60" />
+                  <span>Markdown · Mermaid · Grafo · Presentación · Recordatorios</span>
+                </p>
               </div>
+            </div>
+            
+            {/* Atajos de teclado */}
+            <div className="hidden lg:flex items-center gap-3">
+              {[
+                { key: 'Ctrl+K', label: 'Buscar' },
+                { key: 'Ctrl+F', label: 'Avanzada' },
+                { key: 'Ctrl+N', label: 'Nueva' },
+              ].map(({ key, label }) => (
+                <span key={key} className="flex items-center gap-1.5 text-xs text-slate-500">
+                  <kbd className="px-1.5 py-0.5 rounded bg-slate-800/50 text-slate-400 font-mono text-[10px] border border-slate-700/50">
+                    {key}
+                  </kbd>
+                  <span className="text-slate-600">{label}</span>
+                </span>
+              ))}
             </div>
           </div>
         </header>
 
-        {/* Contenido */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Contenido Principal — max-w-[1800px] */}
+        <main className="max-w-[1800px] mx-auto px-6 py-6">
           <TutorialesLibrary onContextChange={setContextoMascota} onNotasChange={setTotalNotas} />
         </main>
       </div>
