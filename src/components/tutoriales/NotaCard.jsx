@@ -2,8 +2,8 @@
  * NotaCard.jsx
  * 
  * Tarjeta de vista previa de una nota/tutorial.
- * Soporta modo grid (tarjeta completa) y modo lista (compacto).
- * Incluye placeholder para Módulo 8: AI Learning Mentor.
+ * Soporta modo grid y modo lista.
+ * Incluye: Pin, Duplicar, Favorito, Placeholder Módulo 8.
  */
 import {
   Star,
@@ -12,11 +12,14 @@ import {
   Trash2,
   Brain,
   Clock,
+  Pin,
+  PinOff,
+  Copy,
 } from 'lucide-react';
 import { CATEGORIAS } from './CategoryFilter';
 
 /**
- * Extrae texto plano del contenido Markdown (sin formato)
+ * Extrae texto plano del contenido Markdown
  */
 const extraerTextoPlano = (markdown, maxLength = 100) => {
   if (!markdown) return '';
@@ -50,16 +53,17 @@ const calcularTiempoLectura = (contenido) => {
 
 /**
  * Componente de tarjeta de nota
- * 
- * @param {Object} props
- * @param {Object} props.nota - Datos de la nota
- * @param {boolean} props.compacto - Si mostrar en modo lista compacta
- * @param {Function} props.onVer - Callback al hacer clic en "Ver"
- * @param {Function} props.onEditar - Callback al hacer clic en "Editar"
- * @param {Function} props.onEliminar - Callback al hacer clic en "Eliminar"
- * @param {Function} props.onToggleFavorito - Callback al toggle favorito
  */
-export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEliminar, onToggleFavorito }) {
+export default function NotaCard({ 
+  nota, 
+  compacto = false, 
+  onVer, 
+  onEditar, 
+  onEliminar, 
+  onToggleFavorito,
+  onTogglePin,
+  onDuplicar,
+}) {
   const categoria = CATEGORIAS[nota.categoria] || CATEGORIAS.general;
   const CategoriaIcon = categoria.icon;
   const tags = nota.tags || [];
@@ -71,7 +75,16 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
   // Modo lista compacta
   if (compacto) {
     return (
-      <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4 backdrop-blur-sm hover:border-slate-700/50 transition-all duration-300 group flex items-center gap-4">
+      <div className={`bg-slate-900/50 border rounded-xl p-4 backdrop-blur-sm hover:border-slate-700/50 transition-all duration-300 group flex items-center gap-4 ${
+        nota.pinned ? 'border-cyan-800/30 bg-cyan-950/10' : 'border-slate-800/50'
+      }`}>
+        {/* Indicador de pin */}
+        {nota.pinned && (
+          <div className="absolute -top-1 -left-1">
+            <Pin size={10} className="text-cyan-400 fill-cyan-400" />
+          </div>
+        )}
+        
         {/* Icono de categoría */}
         <div className={`p-2.5 rounded-xl border shrink-0 ${categoria.color}`}>
           <CategoriaIcon size={16} />
@@ -80,6 +93,7 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
         {/* Contenido */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
+            {nota.pinned && <Pin size={11} className="text-cyan-400 shrink-0" />}
             <h3 className="text-sm font-semibold text-slate-100 truncate">
               {nota.titulo}
             </h3>
@@ -95,9 +109,7 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
             {tags.length > 0 && (
               <div className="flex items-center gap-1">
                 {tags.slice(0, 2).map((tag, i) => (
-                  <span key={i} className="text-[10px] text-slate-600">
-                    #{tag}
-                  </span>
+                  <span key={i} className="text-[10px] text-slate-600">#{tag}</span>
                 ))}
                 {tagsRestantes > 0 && (
                   <span className="text-[10px] text-slate-600">+{tagsRestantes}</span>
@@ -109,6 +121,20 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
 
         {/* Acciones */}
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+          <button
+            onClick={() => onTogglePin(nota.id)}
+            className={`p-2 rounded-lg hover:bg-slate-800 transition ${nota.pinned ? 'text-cyan-400' : 'text-slate-500 hover:text-cyan-400'}`}
+            title={nota.pinned ? 'Desfijar' : 'Fijar'}
+          >
+            {nota.pinned ? <PinOff size={14} /> : <Pin size={14} />}
+          </button>
+          <button
+            onClick={() => onDuplicar(nota.id)}
+            className="p-2 rounded-lg hover:bg-slate-800 text-slate-500 hover:text-white transition"
+            title="Duplicar"
+          >
+            <Copy size={14} />
+          </button>
           <button
             onClick={() => onVer(nota)}
             className="p-2 rounded-lg hover:bg-slate-800 text-slate-500 hover:text-cyan-400 transition"
@@ -137,9 +163,18 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
 
   // Modo grid (tarjeta completa)
   return (
-    <div className="bg-slate-900/50 border border-slate-800/50 rounded-2xl p-5 backdrop-blur-sm shadow-xl hover:border-slate-700/50 transition-all duration-300 group flex flex-col">
-      {/* Header de la tarjeta */}
-      <div className="flex items-start justify-between gap-2 mb-3">
+    <div className={`bg-slate-900/50 border rounded-2xl p-5 backdrop-blur-sm shadow-xl hover:border-slate-700/50 transition-all duration-300 group flex flex-col relative ${
+      nota.pinned ? 'border-cyan-800/30 bg-gradient-to-br from-cyan-950/10 to-slate-900/50' : 'border-slate-800/50'
+    }`}>
+      {/* Indicador de pin */}
+      {nota.pinned && (
+        <div className="absolute top-3 right-3">
+          <Pin size={12} className="text-cyan-400 fill-cyan-400" />
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex items-start justify-between gap-2 mb-3 pr-4">
         <h3 className="text-base font-semibold text-slate-100 line-clamp-2 flex-1">
           {nota.titulo}
         </h3>
@@ -159,7 +194,7 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
         </button>
       </div>
 
-      {/* Badge de categoría */}
+      {/* Categoría + tiempo */}
       <div className="flex items-center gap-2 mb-3">
         <span className={`text-xs px-2 py-1 rounded-md border flex items-center gap-1 ${categoria.color}`}>
           <CategoriaIcon size={11} />
@@ -171,7 +206,7 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
         </span>
       </div>
 
-      {/* Extracto del contenido */}
+      {/* Extracto */}
       <p className="text-sm text-slate-400 leading-relaxed mb-3 flex-1 line-clamp-3">
         {extracto || 'Sin contenido'}
       </p>
@@ -195,7 +230,7 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
         </div>
       )}
 
-      {/* Placeholder para Módulo 8: AI Learning Mentor */}
+      {/* Placeholder Módulo 8 */}
       <button className="text-xs text-cyan-400/70 hover:text-cyan-300 flex items-center gap-1 mb-3 transition w-fit">
         <Brain size={12} />
         <span>Preguntar al Mentor IA</span>
@@ -211,6 +246,24 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
           Ver
         </button>
         <button
+          onClick={() => onTogglePin(nota.id)}
+          className={`p-1.5 rounded-lg transition ${
+            nota.pinned 
+              ? 'bg-cyan-950/40 text-cyan-400 hover:bg-cyan-950/60' 
+              : 'bg-slate-800/50 text-slate-500 hover:text-cyan-400 hover:bg-slate-800'
+          }`}
+          title={nota.pinned ? 'Desfijar' : 'Fijar arriba'}
+        >
+          {nota.pinned ? <PinOff size={13} /> : <Pin size={13} />}
+        </button>
+        <button
+          onClick={() => onDuplicar(nota.id)}
+          className="p-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-500 hover:text-white transition"
+          title="Duplicar nota"
+        >
+          <Copy size={13} />
+        </button>
+        <button
           onClick={() => onEditar(nota)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-medium transition"
         >
@@ -219,7 +272,7 @@ export default function NotaCard({ nota, compacto = false, onVer, onEditar, onEl
         </button>
         <button
           onClick={() => onEliminar(nota.id)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-950/30 hover:bg-red-950/60 text-red-400/70 hover:text-red-300 text-xs font-medium transition ml-auto"
+          className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-red-950/30 hover:bg-red-950/60 text-red-400/70 hover:text-red-300 text-xs font-medium transition ml-auto"
         >
           <Trash2 size={13} />
         </button>

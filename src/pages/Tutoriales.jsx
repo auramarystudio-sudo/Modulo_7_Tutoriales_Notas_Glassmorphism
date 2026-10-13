@@ -31,9 +31,25 @@ export default function Tutoriales() {
                 </h1>
                 <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
                   <Sparkles size={10} />
-                  Base de conocimiento personal con Markdown
+                  Base de conocimiento personal · Markdown · Dashboard · Snippets
                 </p>
               </div>
+            </div>
+            
+            {/* Atajos visibles */}
+            <div className="hidden lg:flex items-center gap-3 text-[10px] text-slate-600">
+              <span className="flex items-center gap-1">
+                <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">Ctrl+K</kbd>
+                Buscar
+              </span>
+              <span className="flex items-center gap-1">
+                <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">Ctrl+N</kbd>
+                Nueva
+              </span>
+              <span className="flex items-center gap-1">
+                <kbd className="px-1.5 py-0.5 rounded bg-slate-800/60 text-slate-500 font-mono border border-slate-700/30">Ctrl+D</kbd>
+                Dashboard
+              </span>
             </div>
           </div>
         </div>
